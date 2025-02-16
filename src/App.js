@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import TransactionForm from "./components/TransactionForm";
+import TransactionList from "./components/TransactionList";
+import ExpenseChart from "./components/ExpenseChart";
+import Dashboard from "./components/Dashboard";
+import BudgetForm from "./components/BudgetForm";
+import { Container } from "react-bootstrap";
 
-function App() {
+export default function App() {
+  const [transactions, setTransactions] = useState([]);
+  const [budgets, setBudgets] = useState({});
+
+  function addTransaction(transaction) {
+    setTransactions([...transactions, transaction]);
+  }
+
+  function deleteTransaction(index) {
+    setTransactions(transactions.filter((_, i) => i !== index));
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container className="py-5">
+      <h1 className="text-center mb-4">Personal Finance Visualizer</h1>
+      <Dashboard transactions={transactions} budgets={budgets} />
+      <BudgetForm setBudget={setBudgets} />
+      <TransactionForm addTransaction={addTransaction} />
+      <TransactionList transactions={transactions} deleteTransaction={deleteTransaction} />
+      <ExpenseChart transactions={transactions} budgets={budgets} />
+    </Container>
   );
 }
-
-export default App;
